@@ -1,6 +1,6 @@
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
-pandas==2.2.2
+pandas==2.2.2 --only-binary=:all:
 numpy==1.26.4
 SQLAlchemy==2.0.32
 python-multipart==0.0.9

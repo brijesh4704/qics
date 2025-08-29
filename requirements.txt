@@ -14,11 +14,7 @@ pytz==2025.2
 tzdata==2025.2
 click==8.2.1
 h11==0.16.0
-
-# ✅ Missing dependency for your ORM
 SQLAlchemy==2.0.36
-
-# Optional: if you plan to use MySQL
 pymysql==1.1.1
-# Optional: if you plan to use Postgres
 psycopg2-binary==2.9.9
+gunicorn==23.0.0

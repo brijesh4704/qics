@@ -5,9 +5,9 @@ from datetime import date, datetime
 import io, csv, os
 import pandas as pd
 
-from database import Base, engine, SessionLocal
-from models import Vehicle, DPCRecord, RSPRecord, QualityDoc
-from analysis import rsp_cumulative, last_working_day, defect_comparison
+from app.database import Base, engine, SessionLocal
+from app.models import Vehicle, DPCRecord, RSPRecord, QualityDoc
+from app.analysis import rsp_cumulative, last_working_day, defect_comparison
 
 app = FastAPI(title="QICS Python Backend", version="1.0.0")
 
@@ -52,7 +52,6 @@ async def upload_doc(vin: str = Form(...), title: str = Form(...), dtype: str = 
     if not v:
         v = Vehicle(vin=vin, model="UNKNOWN")
         db.add(v); db.commit(); db.refresh(v)
-    # save file
     safe_name = f"{vin}_{int(datetime.utcnow().timestamp())}_{file.filename}".replace("/", "_")
     dest_dir = "data/docs"
     os.makedirs(dest_dir, exist_ok=True)
@@ -63,7 +62,7 @@ async def upload_doc(vin: str = Form(...), title: str = Form(...), dtype: str = 
     db.add(doc); db.commit()
     return {"ok": True, "path": safe_name}
 
-# --------------- DPC CSV endpoint (to match front-end demo) ---------------
+# --------------- DPC CSV endpoint ---------------
 @app.get("/api/dpc-data", response_class=PlainTextResponse)
 def dpc_data_csv(db: Session = Depends(get_db)):
     rows = db.query(DPCRecord).order_by(DPCRecord.date.desc()).all()
@@ -74,7 +73,7 @@ def dpc_data_csv(db: Session = Depends(get_db)):
         w.writerow([r.vin, r.model, f"{r.dpc_target}", f"{r.dpc_actual}"])
     return output.getvalue()
 
-# --------------- DPC monitoring (JSON, date range) ---------------
+# --------------- DPC monitoring ---------------
 @app.get("/api/dpc-monitoring")
 def dpc_monitoring(from_: str, to: str, db: Session = Depends(get_db)):
     try:
@@ -99,7 +98,7 @@ def rsp(from_: str, to: str, db: Session = Depends(get_db)):
     res = rsp_cumulative(df, start, end)
     return {"summary": {k: res[k] for k in ['days','cum_target','cum_actual','achievement_pct']}, "rows": res['rows']}
 
-# --------------- Defect comparison helper ---------------
+# --------------- Defect comparison ---------------
 @app.post("/api/defects/compare")
 def compare(payload: dict):
     ref = pd.to_datetime(payload.get("referenceDate")).date()

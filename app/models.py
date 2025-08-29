@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, DateTime, Text
 from sqlalchemy.orm import relationship
-from database import Base
+from app.database import Base
 
 class Vehicle(Base):
     __tablename__ = "vehicles"

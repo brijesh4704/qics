@@ -1,5 +1,5 @@
-from database import Base, engine, SessionLocal
-from models import Vehicle, DPCRecord, RSPRecord, QualityDoc
+from app.database import Base, engine, SessionLocal
+from app.models import Vehicle, DPCRecord, RSPRecord, QualityDoc
 from datetime import date, timedelta, datetime
 import random, os, shutil
 

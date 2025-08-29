@@ -5,9 +5,9 @@ from datetime import date, datetime
 import io, csv, os
 import pandas as pd
 
-from .database import Base, engine, SessionLocal
-from .models import Vehicle, DPCRecord, RSPRecord, QualityDoc
-from .analysis import rsp_cumulative, last_working_day, defect_comparison
+from database import Base, engine, SessionLocal
+from models import Vehicle, DPCRecord, RSPRecord, QualityDoc
+from analysis import rsp_cumulative, last_working_day, defect_comparison
 
 app = FastAPI(title="QICS Python Backend", version="1.0.0")
 
